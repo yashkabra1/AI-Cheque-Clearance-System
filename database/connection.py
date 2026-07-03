@@ -2,8 +2,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import URL
 
-USERNAME = "root"
-PASSWORD = "Yash@1234"
+USERNAME = "Your UserName"
+PASSWORD = "Your Password"
 HOST = "localhost"
 PORT = 3306
 DATABASE = "ai_cheque_clearance"
