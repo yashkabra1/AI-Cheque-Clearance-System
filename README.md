@@ -218,3 +218,332 @@ reports/
 ```
 
 ---
+
+# 🏗️ System Architecture
+
+```text
+                    ┌────────────────────┐
+                    │   Cheque Image     │
+                    └─────────┬──────────┘
+                              │
+                              ▼
+                 ┌────────────────────────┐
+                 │     YOLOv8 Detection    │
+                 └─────────┬──────────────┘
+                           │
+           Detects Account, Payee, Amount,
+           Date, MICR, Signature, etc.
+                           │
+                           ▼
+              ┌──────────────────────────┐
+              │    Crop Each Field       │
+              └─────────┬────────────────┘
+                        │
+                        ▼
+              ┌──────────────────────────┐
+              │  Google Gemini Vision    │
+              │        OCR               │
+              └─────────┬────────────────┘
+                        │
+                        ▼
+             Structured Cheque Information
+                        │
+                        ▼
+             ┌─────────────────────────┐
+             │ Verification Engine     │
+             └─────────┬───────────────┘
+                       │
+      ┌────────────────┼────────────────┐
+      ▼                ▼                ▼
+ Account Check    Balance Check    MICR Check
+      │                │                │
+      └────────────────┼────────────────┘
+                       ▼
+              ┌──────────────────────┐
+              │   Decision Engine    │
+              └─────────┬────────────┘
+                        │
+          ┌─────────────┴──────────────┐
+          ▼                            ▼
+      APPROVED                     REJECTED
+          │
+          ▼
+   Update MySQL Database
+          │
+          ▼
+ Generate Excel Report
+```
+
+---
+
+# 🔄 Workflow
+
+The complete workflow of the AI Cheque Clearance System is:
+
+1. Upload a cheque image.
+2. YOLOv8 detects cheque fields.
+3. Each detected field is cropped.
+4. Google Gemini Vision extracts text from each field.
+5. Extracted data is converted into structured cheque information.
+6. The Verification Engine validates:
+   - Account Number
+   - MICR Code
+   - Account Status
+   - Available Balance
+   - Cheque Date
+7. The Decision Engine decides whether the cheque should be approved or rejected.
+8. Customer balance is updated if approved.
+9. Transaction details are stored in the MySQL database.
+10. A final Excel report is generated.
+
+---
+
+# 🧠 Verification Process
+
+The system performs the following checks before approving a cheque:
+
+- ✅ Customer Exists
+- ✅ Account Number Exists
+- ✅ MICR Code Matches
+- ✅ Account is Active
+- ✅ Available Balance is Sufficient
+- ✅ Cheque Date is Valid
+- ✅ Amount is Positive
+
+If any validation fails, the cheque is rejected with a reason.
+
+---
+
+# 🗄️ Database Design
+
+The project uses MySQL with SQLAlchemy ORM.
+
+### Customers Table
+
+| Column | Description |
+|---------|-------------|
+| customer_id | Customer ID |
+| first_name | First Name |
+| last_name | Last Name |
+| account_number | Bank Account Number |
+| micr | MICR Code |
+| balance | Available Balance |
+| account_status | Active / Inactive |
+
+---
+
+### Transactions Table
+
+| Column | Description |
+|---------|-------------|
+| transaction_id | Transaction ID |
+| customer_id | Customer ID |
+| cheque_amount | Amount |
+| status | Approved / Rejected |
+| remarks | Decision Reason |
+| created_at | Timestamp |
+
+---
+
+# 🎥 Project Demo
+
+You can also include a short GIF demonstrating:
+
+- Uploading a cheque image
+- YOLO detecting fields
+- Gemini extracting text
+- Verification process
+- Cheque approval/rejection
+- Excel report generation
+
+A short 20–30 second GIF provides a quick overview of the system without requiring users to run the project.
+
+---
+
+# 🚀 Future Enhancements
+
+The following features are planned for future releases:
+
+- ✅ AI Signature Verification
+- ✅ Flask REST API
+- ✅ React Dashboard
+- ✅ User Authentication
+- ✅ Docker Support
+- ✅ Cloud Deployment (AWS / Azure)
+- ✅ PDF Report Generation
+- ✅ Email Notification System
+- ✅ SMS Notification
+- ✅ Cheque Fraud Detection
+- ✅ Transaction History Dashboard
+- ✅ Real-time Processing Queue
+
+---
+
+# 📈 Project Roadmap
+
+| Feature | Status |
+|----------|--------|
+| YOLO Field Detection | ✅ Completed |
+| Gemini Vision OCR | ✅ Completed |
+| MySQL Database | ✅ Completed |
+| SQLAlchemy ORM | ✅ Completed |
+| Verification Engine | ✅ Completed |
+| Decision Engine | ✅ Completed |
+| Excel Report Generation | ✅ Completed |
+| Signature Verification | 🚧 In Progress |
+| Flask REST API | 📅 Planned |
+| React Dashboard | 📅 Planned |
+| Docker Deployment | 📅 Planned |
+| Cloud Deployment | 📅 Planned |
+
+---
+
+# 💻 Technologies Used
+
+### Artificial Intelligence
+
+- YOLOv8
+- Google Gemini Vision
+- OpenCV
+
+### Backend
+
+- Python
+- SQLAlchemy
+- MySQL
+
+### Data Processing
+
+- Pandas
+- NumPy
+
+### Development Tools
+
+- Git
+- GitHub
+- Visual Studio Code
+
+---
+
+# 📊 Sample Output
+
+```text
+========================================
+
+AI CHEQUE CLEARANCE SYSTEM
+
+========================================
+
+Image :
+
+Cheque001.jpg
+
+Account :
+
+1000000001
+
+Payee :
+
+Yash Kabra
+
+Amount :
+
+25000
+
+MICR :
+
+MICR000001
+
+Verification :
+
+✔ Account Verified
+
+✔ Balance Verified
+
+✔ MICR Verified
+
+✔ Date Verified
+
+✔ Account Active
+
+----------------------------------------
+
+STATUS :
+
+APPROVED
+
+Transaction ID :
+
+1052
+
+Remaining Balance :
+
+₹225000
+
+========================================
+```
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome.
+
+If you would like to improve the project:
+
+1. Fork the repository
+2. Create a new branch
+3. Commit your changes
+4. Push the branch
+5. Open a Pull Request
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
+
+See the LICENSE file for more information.
+
+---
+
+# 👨‍💻 Author
+
+**Yash Kabra**
+
+BCA (Hons.) – Gaming & Animation
+
+Artificial Intelligence • Computer Vision • Python Development
+
+GitHub:
+
+https://github.com/yashkabra1
+
+---
+
+# 🙏 Acknowledgements
+
+Special thanks to the open-source community and the following projects:
+
+- Ultralytics YOLOv8
+- Google Gemini
+- OpenCV
+- SQLAlchemy
+- MySQL
+- Pandas
+
+---
+
+# ⭐ If you like this project
+
+If you found this project useful:
+
+⭐ Star this repository
+
+🍴 Fork the repository
+
+📢 Share it with others
+
+---
+
+> **Built with ❤️ using Artificial Intelligence, Computer Vision, and Python**
